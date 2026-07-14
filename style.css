@@ -250,7 +250,9 @@ h3 {
 
 .inputs {
     display: flex;
-    gap: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .input-box {

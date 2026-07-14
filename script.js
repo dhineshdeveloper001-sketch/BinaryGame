@@ -5,8 +5,8 @@ const gateData = {
     AND: {
         name: "AND Gate",
         svg: `<svg viewBox="0 0 100 100"><path d="M 30 20 L 50 20 A 30 30 0 0 1 50 80 L 30 80 Z" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="30" y2="35" stroke="currentColor" stroke-width="4"/><line x1="10" y1="65" x2="30" y2="65" stroke="currentColor" stroke-width="4"/><line x1="80" y1="50" x2="100" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
-        description: "Outputs 1 only if BOTH inputs are 1.",
-        evaluate: (a, b) => a & b,
+        description: "Outputs 1 only if ALL inputs are 1.",
+        evaluate: (...args) => args.reduce((acc, curr) => acc & curr),
         truthTable: [[0,0,0], [0,1,0], [1,0,0], [1,1,1]],
         inputs: 2
     },
@@ -14,7 +14,7 @@ const gateData = {
         name: "OR Gate",
         svg: `<svg viewBox="0 0 100 100"><path d="M 30 20 C 50 20 70 35 80 50 C 70 65 50 80 30 80 C 45 65 45 35 30 20" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="38" y2="35" stroke="currentColor" stroke-width="4"/><line x1="10" y1="65" x2="38" y2="65" stroke="currentColor" stroke-width="4"/><line x1="80" y1="50" x2="100" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
         description: "Outputs 1 if AT LEAST ONE input is 1.",
-        evaluate: (a, b) => a | b,
+        evaluate: (...args) => args.reduce((acc, curr) => acc | curr),
         truthTable: [[0,0,0], [0,1,1], [1,0,1], [1,1,1]],
         inputs: 2
     },
@@ -29,32 +29,32 @@ const gateData = {
     NAND: {
         name: "NAND Gate",
         svg: `<svg viewBox="0 0 100 100"><path d="M 30 20 L 50 20 A 30 30 0 0 1 50 80 L 30 80 Z" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="85" cy="50" r="5" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="30" y2="35" stroke="currentColor" stroke-width="4"/><line x1="10" y1="65" x2="30" y2="65" stroke="currentColor" stroke-width="4"/><line x1="90" y1="50" x2="100" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
-        description: "Opposite of AND. Outputs 0 only if BOTH inputs are 1.",
-        evaluate: (a, b) => (a & b) === 1 ? 0 : 1,
+        description: "Opposite of AND. Outputs 0 only if ALL inputs are 1.",
+        evaluate: (...args) => args.reduce((acc, curr) => acc & curr) === 1 ? 0 : 1,
         truthTable: [[0,0,1], [0,1,1], [1,0,1], [1,1,0]],
         inputs: 2
     },
     NOR: {
         name: "NOR Gate",
         svg: `<svg viewBox="0 0 100 100"><path d="M 30 20 C 50 20 70 35 80 50 C 70 65 50 80 30 80 C 45 65 45 35 30 20" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="85" cy="50" r="5" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="38" y2="35" stroke="currentColor" stroke-width="4"/><line x1="10" y1="65" x2="38" y2="65" stroke="currentColor" stroke-width="4"/><line x1="90" y1="50" x2="100" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
-        description: "Opposite of OR. Outputs 1 only if BOTH inputs are 0.",
-        evaluate: (a, b) => (a | b) === 1 ? 0 : 1,
+        description: "Opposite of OR. Outputs 1 only if ALL inputs are 0.",
+        evaluate: (...args) => args.reduce((acc, curr) => acc | curr) === 1 ? 0 : 1,
         truthTable: [[0,0,1], [0,1,0], [1,0,0], [1,1,0]],
         inputs: 2
     },
     XOR: {
         name: "XOR Gate",
         svg: `<svg viewBox="0 0 100 100"><path d="M 20 20 C 35 35 35 65 20 80" fill="none" stroke="currentColor" stroke-width="4"/><path d="M 30 20 C 50 20 70 35 80 50 C 70 65 50 80 30 80 C 45 65 45 35 30 20" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="26" y2="35" stroke="currentColor" stroke-width="4"/><line x1="10" y1="65" x2="26" y2="65" stroke="currentColor" stroke-width="4"/><line x1="80" y1="50" x2="100" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
-        description: "Outputs 1 if inputs are DIFFERENT.",
-        evaluate: (a, b) => a !== b ? 1 : 0,
+        description: "Outputs 1 if an ODD number of inputs are 1.",
+        evaluate: (...args) => args.reduce((acc, curr) => acc ^ curr),
         truthTable: [[0,0,0], [0,1,1], [1,0,1], [1,1,0]],
         inputs: 2
     },
     XNOR: {
         name: "XNOR Gate",
         svg: `<svg viewBox="0 0 100 100"><path d="M 20 20 C 35 35 35 65 20 80" fill="none" stroke="currentColor" stroke-width="4"/><path d="M 30 20 C 50 20 70 35 80 50 C 70 65 50 80 30 80 C 45 65 45 35 30 20" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="85" cy="50" r="5" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="26" y2="35" stroke="currentColor" stroke-width="4"/><line x1="10" y1="65" x2="26" y2="65" stroke="currentColor" stroke-width="4"/><line x1="90" y1="50" x2="100" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
-        description: "Outputs 1 if inputs are the SAME.",
-        evaluate: (a, b) => a === b ? 1 : 0,
+        description: "Outputs 1 if an EVEN number of inputs are 1 (or all same for 2-input).",
+        evaluate: (...args) => args.reduce((acc, curr) => acc ^ curr) === 1 ? 0 : 1,
         truthTable: [[0,0,1], [0,1,0], [1,0,0], [1,1,1]],
         inputs: 2
     }
@@ -78,24 +78,24 @@ const levels = {
         { gate: 'NAND', a_str: 'NOT 1', a_val: 0, b_str: '1', b_val: 1, desc: "Evaluate the input logic first, then apply the NAND gate." },
         { gate: 'NOR', a_str: '0', a_val: 0, b_str: 'NOT 0', b_val: 1, desc: "Solve the NOT gate on input B first." },
         { gate: 'XOR', a_str: '1', a_val: 1, b_str: '1', b_val: 1, desc: "Are the inputs different?" },
+        { gate: 'AND', a: 1, b: 0, c: 1, desc: "A 3-input AND gate! Can you solve it?" },
+        { gate: 'OR', a: 0, b: 0, c: 1, desc: "A 3-input OR gate! Find the output." },
+        { gate: 'XOR', a: 1, b: 1, c: 1, desc: "3-input XOR (odd number of 1s outputs 1)." },
         { gate: 'XNOR', a_str: 'NOT 1', a_val: 0, b_str: 'NOT 1', b_val: 0, desc: "Evaluate the inputs, then apply the XNOR gate." },
-        { gate: 'AND', a_str: '1 OR 0', a_val: 1, b_str: '0', b_val: 0, desc: "Input A is the result of an OR gate. What's the final output?" },
-        { gate: 'OR', a_str: '1 AND 0', a_val: 0, b_str: '1 AND 1', b_val: 1, desc: "Solve the AND gates on the inputs first." },
-        { gate: 'XOR', a_str: '1 XOR 1', a_val: 0, b_str: '1', b_val: 1, desc: "Nested logic! Evaluate input A first." },
-        { gate: 'NAND', a_str: '1', a_val: 1, b_str: '1', b_val: 1, desc: "Find the output of a NAND gate." },
-        { gate: 'NOR', a_str: '0 OR 0', a_val: 0, b_str: '0 AND 1', b_val: 0, desc: "Evaluate the inputs first." },
-        { gate: 'XNOR', a_str: '1 AND 1', a_val: 1, b_str: '1 OR 0', b_val: 1, desc: "Evaluate the inputs first." }
+        { gate: 'NAND', a: 1, b: 1, c: 1, desc: "3-input NAND gate. All inputs are 1." },
+        { gate: 'NOR', a: 0, b: 0, c: 0, desc: "3-input NOR gate. All inputs are 0." },
+        { gate: 'XNOR', a: 1, b: 0, c: 1, desc: "3-input XNOR. What's the output?" }
     ],
     hard: [
         { gate: 'NAND', a_str: '(1 OR 0)', a_val: 1, b_str: '(1 AND 1)', b_val: 1, desc: "Evaluate the expressions, then apply the NAND gate." },
-        { gate: 'NOR', a_str: 'NOT(1 AND 0)', a_val: 1, b_str: 'NOT(1 OR 1)', b_val: 0, desc: "Carefully evaluate the inputs!" },
-        { gate: 'XOR', a_str: '1 XOR 0', a_val: 1, b_str: '1 XNOR 1', b_val: 1, desc: "Inputs are complex logic expressions." },
-        { gate: 'XNOR', a_str: '1 AND 0', a_val: 0, b_str: 'NOT(1)', b_val: 0, desc: "Find the result of this XNOR gate." },
-        { gate: 'AND', a_str: 'NOT(0 OR 0)', a_val: 1, b_str: 'NOT(1 AND 1)', b_val: 0, desc: "Logic gates inside logic gates." },
-        { gate: 'OR', a_str: '1 XOR 1', a_val: 0, b_str: '0 XNOR 0', b_val: 1, desc: "Evaluate the inputs first." },
-        { gate: 'NAND', a_str: 'NOT(0) AND 1', a_val: 1, b_str: '1 OR NOT(1)', b_val: 1, desc: "Don't get tricked by the NOTs." },
-        { gate: 'NOR', a_str: '1 NAND 1', a_val: 0, b_str: '0 NOR 0', b_val: 1, desc: "Inputs are outputs of NAND and NOR gates." },
-        { gate: 'XOR', a_str: '0 XOR 0', a_val: 0, b_str: '1 XOR 1', b_val: 0, desc: "Can you figure this out?" },
+        { gate: 'AND', a_str: 'NOT(0)', a_val: 1, b_str: '1 OR 0', b_val: 1, c_str: '1', c_val: 1, desc: "3 inputs with complex string evaluations!" },
+        { gate: 'OR', a_str: '1 XOR 1', a_val: 0, b_str: '0 AND 1', b_val: 0, c_str: 'NOT(1)', c_val: 0, desc: "3 inputs! Can you evaluate them all?" },
+        { gate: 'XOR', a_str: '1', a_val: 1, b_str: '0 OR 0', b_val: 0, c_str: '1 AND 1', c_val: 1, desc: "3-input XOR with complex expressions!" },
+        { gate: 'NAND', a_str: 'NOT(1)', a_val: 0, b_str: 'NOT(0)', b_val: 1, c_str: '1 XOR 0', c_val: 1, desc: "3 inputs! Trick question." },
+        { gate: 'NOR', a_str: '1 AND 0', a_val: 0, b_str: '0 AND 1', b_val: 0, c_str: '0 XOR 0', c_val: 0, desc: "3 inputs! Find the output of NOR." },
+        { gate: 'XNOR', a_str: 'NOT(0)', a_val: 1, b_str: '1', b_val: 1, c_str: '1 OR 1', c_val: 1, desc: "3-input XNOR with complex strings." },
+        { gate: 'NAND', a_str: '1 AND 1', a_val: 1, b_str: 'NOT(0)', b_val: 1, c_str: '1 XOR 1', c_val: 0, desc: "3-input NAND gate! Don't get tricked." },
+        { gate: 'XOR', a_str: '0 XOR 1', a_val: 1, b_str: '1 XNOR 0', b_val: 0, c_str: '1 AND 1', c_val: 1, desc: "The ultimate 3-input XOR." },
         { gate: 'XNOR', a_str: 'NOT(1 XOR 0)', a_val: 0, b_str: 'NOT(0 XNOR 1)', b_val: 1, desc: "The ultimate final challenge!" }
     ]
 };
@@ -160,11 +160,22 @@ function loadLevel() {
     document.getElementById('input-a').innerText = level.a_str !== undefined ? level.a_str : level.a;
     
     const inputBContainer = document.getElementById('input-b-container');
+    const inputCContainer = document.getElementById('input-c-container');
+
     if (gateInfo.inputs === 1) {
         inputBContainer.style.display = 'none';
+        inputCContainer.style.display = 'none';
     } else {
         inputBContainer.style.display = 'flex';
         document.getElementById('input-b').innerText = level.b_str !== undefined ? level.b_str : level.b;
+        
+        // Handle third input C
+        if (level.c !== undefined || level.c_val !== undefined) {
+            inputCContainer.style.display = 'flex';
+            document.getElementById('input-c').innerText = level.c_str !== undefined ? level.c_str : level.c;
+        } else {
+            inputCContainer.style.display = 'none';
+        }
     }
 
     // Set Gate Symbol
@@ -195,7 +206,14 @@ function checkAnswer(userChoice) {
     
     const a = level.a_val !== undefined ? level.a_val : level.a;
     const b = level.b_val !== undefined ? level.b_val : level.b;
-    const correctAnswer = gateInfo.evaluate(a, b);
+    
+    let correctAnswer;
+    if (level.c !== undefined || level.c_val !== undefined) {
+        const c = level.c_val !== undefined ? level.c_val : level.c;
+        correctAnswer = gateInfo.evaluate(a, b, c);
+    } else {
+        correctAnswer = gateInfo.evaluate(a, b);
+    }
 
     const feedback = document.getElementById('feedback-message');
     feedback.classList.remove('hidden');
