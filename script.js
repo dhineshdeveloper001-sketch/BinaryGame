@@ -75,28 +75,28 @@ const levels = {
         { gate: 'AND', a: 0, b: 1, desc: "Find the output of an AND gate." }
     ],
     medium: [
-        { gate: 'NAND', a: 0, b: 0, desc: "Find the output of a NAND gate." },
-        { gate: 'NAND', a: 1, b: 1, desc: "Find the output of a NAND gate." },
-        { gate: 'NOR', a: 0, b: 0, desc: "Find the output of a NOR gate." },
-        { gate: 'NOR', a: 1, b: 0, desc: "Find the output of a NOR gate." },
-        { gate: 'XOR', a: 1, b: 0, desc: "Find the output of an XOR gate." },
-        { gate: 'XOR', a: 1, b: 1, desc: "Find the output of an XOR gate." },
-        { gate: 'XNOR', a: 0, b: 0, desc: "Find the output of an XNOR gate." },
-        { gate: 'XNOR', a: 1, b: 0, desc: "Find the output of an XNOR gate." },
-        { gate: 'NAND', a: 1, b: 0, desc: "Find the output of a NAND gate." },
-        { gate: 'NOR', a: 1, b: 1, desc: "Find the output of a NOR gate." }
+        { gate: 'NAND', a_str: 'NOT 1', a_val: 0, b_str: '1', b_val: 1, desc: "Evaluate the input logic first, then apply the NAND gate." },
+        { gate: 'NOR', a_str: '0', a_val: 0, b_str: 'NOT 0', b_val: 1, desc: "Solve the NOT gate on input B first." },
+        { gate: 'XOR', a_str: '1', a_val: 1, b_str: '1', b_val: 1, desc: "Are the inputs different?" },
+        { gate: 'XNOR', a_str: 'NOT 1', a_val: 0, b_str: 'NOT 1', b_val: 0, desc: "Evaluate the inputs, then apply the XNOR gate." },
+        { gate: 'AND', a_str: '1 OR 0', a_val: 1, b_str: '0', b_val: 0, desc: "Input A is the result of an OR gate. What's the final output?" },
+        { gate: 'OR', a_str: '1 AND 0', a_val: 0, b_str: '1 AND 1', b_val: 1, desc: "Solve the AND gates on the inputs first." },
+        { gate: 'XOR', a_str: '1 XOR 1', a_val: 0, b_str: '1', b_val: 1, desc: "Nested logic! Evaluate input A first." },
+        { gate: 'NAND', a_str: '1', a_val: 1, b_str: '1', b_val: 1, desc: "Find the output of a NAND gate." },
+        { gate: 'NOR', a_str: '0 OR 0', a_val: 0, b_str: '0 AND 1', b_val: 0, desc: "Evaluate the inputs first." },
+        { gate: 'XNOR', a_str: '1 AND 1', a_val: 1, b_str: '1 OR 0', b_val: 1, desc: "Evaluate the inputs first." }
     ],
     hard: [
-        { gate: 'NAND', a: 1, b: 1, desc: "AND followed by NOT. What is the output?" },
-        { gate: 'NOR', a: 0, b: 0, desc: "OR followed by NOT. What is the output?" },
-        { gate: 'XOR', a: 0, b: 1, desc: "Inputs are different. What does XOR output?" },
-        { gate: 'XNOR', a: 1, b: 1, desc: "Inputs are the same. What does XNOR output?" },
-        { gate: 'XOR', a: 0, b: 0, desc: "Inputs are the same. What does XOR output?" },
-        { gate: 'NAND', a: 0, b: 1, desc: "If inputs are different, what does NAND output?" },
-        { gate: 'NOR', a: 0, b: 1, desc: "If inputs are different, what does NOR output?" },
-        { gate: 'XNOR', a: 0, b: 1, desc: "Inputs are different. What does XNOR output?" },
-        { gate: 'NAND', a: 0, b: 0, desc: "Both inputs OFF into a NAND gate." },
-        { gate: 'NOR', a: 1, b: 1, desc: "Both inputs ON into a NOR gate." }
+        { gate: 'NAND', a_str: '(1 OR 0)', a_val: 1, b_str: '(1 AND 1)', b_val: 1, desc: "Evaluate the expressions, then apply the NAND gate." },
+        { gate: 'NOR', a_str: 'NOT(1 AND 0)', a_val: 1, b_str: 'NOT(1 OR 1)', b_val: 0, desc: "Carefully evaluate the inputs!" },
+        { gate: 'XOR', a_str: '1 XOR 0', a_val: 1, b_str: '1 XNOR 1', b_val: 1, desc: "Inputs are complex logic expressions." },
+        { gate: 'XNOR', a_str: '1 AND 0', a_val: 0, b_str: 'NOT(1)', b_val: 0, desc: "Find the result of this XNOR gate." },
+        { gate: 'AND', a_str: 'NOT(0 OR 0)', a_val: 1, b_str: 'NOT(1 AND 1)', b_val: 0, desc: "Logic gates inside logic gates." },
+        { gate: 'OR', a_str: '1 XOR 1', a_val: 0, b_str: '0 XNOR 0', b_val: 1, desc: "Evaluate the inputs first." },
+        { gate: 'NAND', a_str: 'NOT(0) AND 1', a_val: 1, b_str: '1 OR NOT(1)', b_val: 1, desc: "Don't get tricked by the NOTs." },
+        { gate: 'NOR', a_str: '1 NAND 1', a_val: 0, b_str: '0 NOR 0', b_val: 1, desc: "Inputs are outputs of NAND and NOR gates." },
+        { gate: 'XOR', a_str: '0 XOR 0', a_val: 0, b_str: '1 XOR 1', b_val: 0, desc: "Can you figure this out?" },
+        { gate: 'XNOR', a_str: 'NOT(1 XOR 0)', a_val: 0, b_str: 'NOT(0 XNOR 1)', b_val: 1, desc: "The ultimate final challenge!" }
     ]
 };
 
@@ -157,14 +157,14 @@ function loadLevel() {
     document.getElementById('progress-bar').style.width = progress + "%";
 
     // Set Inputs
-    document.getElementById('input-a').innerText = level.a;
+    document.getElementById('input-a').innerText = level.a_str !== undefined ? level.a_str : level.a;
     
     const inputBContainer = document.getElementById('input-b-container');
     if (gateInfo.inputs === 1) {
         inputBContainer.style.display = 'none';
     } else {
         inputBContainer.style.display = 'flex';
-        document.getElementById('input-b').innerText = level.b;
+        document.getElementById('input-b').innerText = level.b_str !== undefined ? level.b_str : level.b;
     }
 
     // Set Gate Symbol
@@ -192,7 +192,10 @@ function checkAnswer(userChoice) {
 
     const level = levels[currentDifficulty][currentLevelIndex];
     const gateInfo = gateData[level.gate];
-    const correctAnswer = gateInfo.evaluate(level.a, level.b);
+    
+    const a = level.a_val !== undefined ? level.a_val : level.a;
+    const b = level.b_val !== undefined ? level.b_val : level.b;
+    const correctAnswer = gateInfo.evaluate(a, b);
 
     const feedback = document.getElementById('feedback-message');
     feedback.classList.remove('hidden');
