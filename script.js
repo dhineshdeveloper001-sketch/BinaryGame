@@ -61,20 +61,47 @@ const gateData = {
 };
 
 // Game Levels
-const levels = [
-    { gate: 'AND', a: 1, b: 0, desc: "Find the output of an AND gate." },
-    { gate: 'OR', a: 0, b: 1, desc: "Find the output of an OR gate." },
-    { gate: 'NOT', a: 1, b: null, desc: "Use a NOT gate to find the output." },
-    { gate: 'NAND', a: 1, b: 1, desc: "AND + NOT equivalent. What is the output?" },
-    { gate: 'XOR', a: 1, b: 0, desc: "Find the output of an XOR gate." },
-    { gate: 'NAND', a: 0, b: 1, desc: "Find the output of a NAND gate." },
-    { gate: 'NOR', a: 0, b: 0, desc: "Find the output of a NOR gate." },
-    { gate: 'XNOR', a: 1, b: 1, desc: "Find the output of an XNOR gate." },
-    { gate: 'XOR', a: 1, b: 1, desc: "Mixed challenge: XOR with identical inputs." },
-    { gate: 'AND', a: 1, b: 1, desc: "Final challenge: AND gate with both inputs ON." }
-];
+const levels = {
+    easy: [
+        { gate: 'AND', a: 0, b: 0, desc: "What is the output of an AND gate when both inputs are 0?" },
+        { gate: 'AND', a: 1, b: 1, desc: "What is the output of an AND gate when both inputs are 1?" },
+        { gate: 'OR', a: 0, b: 0, desc: "Find the output of an OR gate." },
+        { gate: 'OR', a: 0, b: 1, desc: "Find the output of an OR gate." },
+        { gate: 'OR', a: 1, b: 1, desc: "Find the output of an OR gate." },
+        { gate: 'NOT', a: 0, b: null, desc: "What does a NOT gate output if input is 0?" },
+        { gate: 'NOT', a: 1, b: null, desc: "What does a NOT gate output if input is 1?" },
+        { gate: 'AND', a: 1, b: 0, desc: "Find the output of an AND gate." },
+        { gate: 'OR', a: 1, b: 0, desc: "Find the output of an OR gate." },
+        { gate: 'AND', a: 0, b: 1, desc: "Find the output of an AND gate." }
+    ],
+    medium: [
+        { gate: 'NAND', a: 0, b: 0, desc: "Find the output of a NAND gate." },
+        { gate: 'NAND', a: 1, b: 1, desc: "Find the output of a NAND gate." },
+        { gate: 'NOR', a: 0, b: 0, desc: "Find the output of a NOR gate." },
+        { gate: 'NOR', a: 1, b: 0, desc: "Find the output of a NOR gate." },
+        { gate: 'XOR', a: 1, b: 0, desc: "Find the output of an XOR gate." },
+        { gate: 'XOR', a: 1, b: 1, desc: "Find the output of an XOR gate." },
+        { gate: 'XNOR', a: 0, b: 0, desc: "Find the output of an XNOR gate." },
+        { gate: 'XNOR', a: 1, b: 0, desc: "Find the output of an XNOR gate." },
+        { gate: 'NAND', a: 1, b: 0, desc: "Find the output of a NAND gate." },
+        { gate: 'NOR', a: 1, b: 1, desc: "Find the output of a NOR gate." }
+    ],
+    hard: [
+        { gate: 'NAND', a: 1, b: 1, desc: "AND followed by NOT. What is the output?" },
+        { gate: 'NOR', a: 0, b: 0, desc: "OR followed by NOT. What is the output?" },
+        { gate: 'XOR', a: 0, b: 1, desc: "Inputs are different. What does XOR output?" },
+        { gate: 'XNOR', a: 1, b: 1, desc: "Inputs are the same. What does XNOR output?" },
+        { gate: 'XOR', a: 0, b: 0, desc: "Inputs are the same. What does XOR output?" },
+        { gate: 'NAND', a: 0, b: 1, desc: "If inputs are different, what does NAND output?" },
+        { gate: 'NOR', a: 0, b: 1, desc: "If inputs are different, what does NOR output?" },
+        { gate: 'XNOR', a: 0, b: 1, desc: "Inputs are different. What does XNOR output?" },
+        { gate: 'NAND', a: 0, b: 0, desc: "Both inputs OFF into a NAND gate." },
+        { gate: 'NOR', a: 1, b: 1, desc: "Both inputs ON into a NOR gate." }
+    ]
+};
 
 // State Variables
+let currentDifficulty = 'easy';
 let currentLevelIndex = 0;
 let score = 0;
 let answered = false;
@@ -95,11 +122,16 @@ function showHome() {
     showScreen('home-section');
 }
 
+function showDifficultySection() {
+    showScreen('difficulty-section');
+}
+
 function showLearnSection() {
     showScreen('learn-section');
 }
 
-function startGame() {
+function startGame(difficulty = 'easy') {
+    currentDifficulty = difficulty;
     currentLevelIndex = 0;
     score = 0;
     loadLevel();
@@ -107,12 +139,12 @@ function startGame() {
 }
 
 function restartGame() {
-    startGame();
+    startGame(currentDifficulty);
 }
 
 function loadLevel() {
     answered = false;
-    const level = levels[currentLevelIndex];
+    const level = levels[currentDifficulty][currentLevelIndex];
     const gateInfo = gateData[level.gate];
 
     // Update UI text
@@ -121,7 +153,7 @@ function loadLevel() {
     document.getElementById('level-description').innerText = level.desc;
     
     // Update progress bar
-    const progress = (currentLevelIndex / levels.length) * 100;
+    const progress = (currentLevelIndex / levels[currentDifficulty].length) * 100;
     document.getElementById('progress-bar').style.width = progress + "%";
 
     // Set Inputs
@@ -158,7 +190,7 @@ function checkAnswer(userChoice) {
     if (answered) return;
     answered = true;
 
-    const level = levels[currentLevelIndex];
+    const level = levels[currentDifficulty][currentLevelIndex];
     const gateInfo = gateData[level.gate];
     const correctAnswer = gateInfo.evaluate(level.a, level.b);
 
@@ -187,7 +219,7 @@ function checkAnswer(userChoice) {
 
     // Show Next Level button or finish
     document.getElementById('next-level-btn').classList.remove('hidden');
-    if (currentLevelIndex === levels.length - 1) {
+    if (currentLevelIndex === levels[currentDifficulty].length - 1) {
         document.getElementById('next-level-btn').innerText = "Finish Game";
     } else {
         document.getElementById('next-level-btn').innerText = "Next Level";
@@ -195,7 +227,7 @@ function checkAnswer(userChoice) {
 }
 
 function nextLevel() {
-    if (currentLevelIndex < levels.length - 1) {
+    if (currentLevelIndex < levels[currentDifficulty].length - 1) {
         currentLevelIndex++;
         loadLevel();
     } else {
@@ -207,11 +239,12 @@ function endGame() {
     showScreen('results-section');
     document.getElementById('final-score').innerText = score;
     
-    const highScore = localStorage.getItem('binaryGameHighScore') || 0;
+    const storageKey = `binaryGameHighScore_${currentDifficulty}`;
+    const highScore = localStorage.getItem(storageKey) || 0;
     const newScoreMsg = document.getElementById('new-highscore-msg');
     
     if (score > highScore) {
-        localStorage.setItem('binaryGameHighScore', score);
+        localStorage.setItem(storageKey, score);
         newScoreMsg.classList.remove('hidden');
     } else {
         newScoreMsg.classList.add('hidden');
@@ -219,8 +252,18 @@ function endGame() {
 }
 
 function updateHighScoreDisplay() {
-    const highScore = localStorage.getItem('binaryGameHighScore') || 0;
-    document.getElementById('home-high-score').innerText = highScore;
+    const easyScore = localStorage.getItem('binaryGameHighScore_easy') || 0;
+    const mediumScore = localStorage.getItem('binaryGameHighScore_medium') || 0;
+    const hardScore = localStorage.getItem('binaryGameHighScore_hard') || 0;
+    
+    const easySpan = document.getElementById('home-easy-score');
+    if (easySpan) easySpan.innerText = easyScore;
+    
+    const mediumSpan = document.getElementById('home-medium-score');
+    if (mediumSpan) mediumSpan.innerText = mediumScore;
+    
+    const hardSpan = document.getElementById('home-hard-score');
+    if (hardSpan) hardSpan.innerText = hardScore;
 }
 
 // Generate Learn Section Cards

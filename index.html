@@ -15,12 +15,26 @@
             <h1>Binary Logic Game</h1>
             <p class="subtitle">Master the fundamentals of digital logic gates through interactive challenges.</p>
             <div class="stats-preview">
-                <p>High Score: <span id="home-high-score">0</span></p>
+                <p>Easy High Score: <span id="home-easy-score">0</span></p>
+                <p>Medium High Score: <span id="home-medium-score">0</span></p>
+                <p>Hard High Score: <span id="home-hard-score">0</span></p>
             </div>
             <div class="buttons">
-                <button onclick="startGame()" class="btn primary">Start Game</button>
+                <button onclick="showDifficultySection()" class="btn primary">Start Game</button>
                 <button onclick="showLearnSection()" class="btn secondary">Learn Gates</button>
             </div>
+        </section>
+
+        <!-- Difficulty Section -->
+        <section id="difficulty-section" class="screen">
+            <h2>Select Difficulty</h2>
+            <p class="subtitle">Choose your challenge level.</p>
+            <div class="buttons difficulty-buttons">
+                <button onclick="startGame('easy')" class="btn diff-easy">Easy</button>
+                <button onclick="startGame('medium')" class="btn diff-medium">Medium</button>
+                <button onclick="startGame('hard')" class="btn diff-hard">Hard</button>
+            </div>
+            <button onclick="showHome()" class="btn secondary back-btn" style="margin-top: 30px;">Back to Home</button>
         </section>
 
         <!-- Learn Section -->
@@ -96,7 +110,7 @@
                 <p id="new-highscore-msg" class="highlight hidden">New High Score!</p>
             </div>
             <div class="buttons">
-                <button onclick="startGame()" class="btn primary">Play Again</button>
+                <button onclick="showDifficultySection()" class="btn primary">Play Again</button>
                 <button onclick="showHome()" class="btn secondary">Back to Home</button>
             </div>
         </section>

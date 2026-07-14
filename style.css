@@ -113,6 +113,21 @@ h3 {
 .btn.danger { background-color: var(--danger-color); }
 .btn.danger:hover { background-color: var(--danger-hover); }
 
+.diff-easy { background-color: var(--success-color); }
+.diff-easy:hover { background-color: #059669; }
+
+.diff-medium { background-color: #f59e0b; }
+.diff-medium:hover { background-color: #d97706; }
+
+.diff-hard { background-color: var(--danger-color); }
+.diff-hard:hover { background-color: var(--danger-hover); }
+
+.difficulty-buttons {
+    flex-direction: column;
+    max-width: 200px;
+    margin: 20px auto;
+}
+
 /* Card and specific elements */
 .card {
     background-color: var(--card-bg);
